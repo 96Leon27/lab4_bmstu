@@ -3,7 +3,6 @@
 #include <pqxx/pqxx>
 
 
-// Добавить автора
 void addAuthor(pqxx::connection* conn) {
     std::string name;
     int year;
@@ -22,7 +21,6 @@ void addAuthor(pqxx::connection* conn) {
     std::cout << "Автор добавлен\n";
 }
 
-// Добавить книгу
 void addBook(pqxx::connection* conn) {
     std::string title, genre;
     int author_id, year;
@@ -46,7 +44,6 @@ void addBook(pqxx::connection* conn) {
     std::cout << "Книга добавлена\n";
 }
 
-// Добавить пользователя
 void addUser(pqxx::connection* conn) {
     std::string name;
 
@@ -60,7 +57,6 @@ void addUser(pqxx::connection* conn) {
     std::cout << "Пользователь добавлен\n";
 }
 
-// Взять книгу
 void borrowBook(pqxx::connection* conn) {
     int user_id, book_id;
 
@@ -70,7 +66,6 @@ void borrowBook(pqxx::connection* conn) {
     std::cin >> book_id;
     std::cin.ignore();
 
-    // Проверяем доступность
     pqxx::work check(*conn);
     auto result = check.exec("SELECT * FROM borrowed WHERE book_id = " +
         check.quote(book_id) + " AND return_date IS NULL");
@@ -89,7 +84,6 @@ void borrowBook(pqxx::connection* conn) {
     std::cout << "Книга взята\n";
 }
 
-// Вернуть книгу
 void returnBook(pqxx::connection* conn) {
     int user_id, book_id;
 
@@ -109,7 +103,6 @@ void returnBook(pqxx::connection* conn) {
     std::cout << "Книга возвращена\n";
 }
 
-// Найти авторов
 void findAuthors(pqxx::connection* conn) {
     std::string name;
 
@@ -128,7 +121,6 @@ void findAuthors(pqxx::connection* conn) {
     txn.commit();
 }
 
-// Найти книги
 void findBooks(pqxx::connection* conn) {
     std::string title;
 
@@ -148,7 +140,6 @@ void findBooks(pqxx::connection* conn) {
     txn.commit();
 }
 
-// Книги автора
 void booksByAuthor(pqxx::connection* conn) {
     int author_id;
 
@@ -169,7 +160,6 @@ void booksByAuthor(pqxx::connection* conn) {
     txn.commit();
 }
 
-// Топ 3 популярные книги
 void top3Books(pqxx::connection* conn) {
     pqxx::work txn(*conn);
     auto result = txn.exec(
@@ -190,7 +180,6 @@ void top3Books(pqxx::connection* conn) {
     txn.commit();
 }
 
-// Книги взятые за последние 30 дней
 void recentBorrows(pqxx::connection* conn) {
     pqxx::work txn(*conn);
     auto result = txn.exec(
@@ -211,7 +200,6 @@ void recentBorrows(pqxx::connection* conn) {
     txn.commit();
 }
 
-// Пользователи за последний год
 void usersLastYear(pqxx::connection* conn) {
     pqxx::work txn(*conn);
     auto result = txn.exec(
@@ -225,9 +213,8 @@ void usersLastYear(pqxx::connection* conn) {
     txn.commit();
 }
 
-// Главное меню
 void showMenu() {
-    std::cout << "\n=== Библиотека ===\n";
+    std::cout << "\nБиблиотека\n";
     std::cout << "1. Добавить автора\n";
     std::cout << "2. Добавить книгу\n";
     std::cout << "3. Добавить пользователя\n";
@@ -239,14 +226,12 @@ void showMenu() {
     std::cout << "9. Топ 3 книги\n";
     std::cout << "10. Книги за 30 дней\n";
     std::cout << "11. Пользователи за год\n";
-    std::cout << "12. Создать таблицы\n";
     std::cout << "0. Выход\n";
     std::cout << "Выбор: ";
 }
 
 int main() {
     try {
-        // Подключение к базе
         std::string conn_str = "dbname=library user=postgres password=20Dec@07$ host=localhost";
         pqxx::connection conn(conn_str);
 
